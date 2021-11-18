@@ -3,6 +3,7 @@ import requests
 from pprint import pprint
 from math import ceil
 from terminaltables import AsciiTable
+from dotenv import load_dotenv
 
 
 def predict_rub_salary(currency, salary_from, salary_to):
@@ -92,7 +93,6 @@ def get_salary_from_hh():
                 if salary != None:
                     sum_of_salaryes += salary 
                     vacancies_processed += 1
-
         average_salary = int(sum_of_salaryes / vacancies_processed)
 
         number_of_vacancies_by_languege[languege].update(
@@ -164,6 +164,6 @@ def get_salary_from_sj():
         })
     output_vacancies_as_table('Super Job', number_of_vacancies_by_languege)
 
-
-get_salary_from_hh()
+load_dotenv()
+#get_salary_from_hh()
 get_salary_from_sj()
