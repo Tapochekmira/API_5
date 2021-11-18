@@ -55,7 +55,7 @@ def  output_vacancies_as_table(name_of_site, number_of_vacancies_by_languege):
 
 def get_salary_from_hh():
     url = 'https://api.hh.ru/vacancies'
-    programming_langueges = ['JavaScript', 'Java',]# 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
+    programming_langueges = ['JavaScript', 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
     number_of_vacancies_by_languege = {} 
 
 
@@ -114,7 +114,7 @@ def get_salary_from_sj():
     }
 
     number_of_vacancies_by_languege = {}
-    programming_langueges = ['JavaScript', 'Java'] # 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
+    programming_langueges = ['JavaScript', 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
 
 
     for languege in programming_langueges:
