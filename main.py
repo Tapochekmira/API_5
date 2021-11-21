@@ -78,7 +78,6 @@ def get_language_salary_hh(language):
             if salary:
                 sum_of_salaryes += salary 
                 vacancies_processed += 1
-        
         if page >= response['pages']:
             break
         
@@ -134,9 +133,7 @@ def get_language_salary_sj(language, super_job_token):
     return sum_of_salaryes, vacancies_processed, vacancies_found
 
 
-def get_average_salary_from_sj(programming_languages):
-    super_job_token = os.environ['SUPER_JOB_API']
-
+def get_average_salary_from_sj(programming_languages, super_job_token):
     number_of_vacancies_by_language = {}
 
     for language in programming_languages:
@@ -154,8 +151,9 @@ def get_average_salary_from_sj(programming_languages):
 
 
 if __name__ == '__main__':
-    programming_languages = ['JavaScript'] # , 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
-
     load_dotenv()
+    programming_languages = ['JavaScript' , 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
+    super_job_token = os.environ['SUPER_JOB_API']
+
     output_vacancies_as_table('HH.ru', get_average_salary_from_hh(programming_languages))
-    output_vacancies_as_table('SJ.ru', get_average_salary_from_sj(programming_languages))
+    output_vacancies_as_table('SJ.ru', get_average_salary_from_sj(programming_languages, super_job_token))
