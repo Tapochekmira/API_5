@@ -164,6 +164,7 @@ def get_salary_from_sj():
 
 
 if __name__ == __main__:
+if __name__ == '__main__':
     load_dotenv()
     get_salary_from_hh()
     get_salary_from_sj()
