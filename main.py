@@ -9,9 +9,9 @@ from dotenv import load_dotenv
 def predict_rub_salary(currency, salary_from, salary_to):
     if currency != 'RUR' and currency != 'rub':
         return None
-    if salary_from == None:
+    if not salary_from:
         return int(salary_to * 0.8)
-    if salary_to == None:
+    if not salary_to:
         return int(salary_from * 1.2)
     return (salary_to + salary_from) // 2
 
