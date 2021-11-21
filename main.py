@@ -20,18 +20,14 @@ def predict_rub_salary(currency, salary_from, salary_to):
 
 def predict_rub_salary_for_hh(vacancy):
     currency = vacancy['currency']
-    salary_from = vacancy['from']
-    salary_to = vacancy['to']
-    return predict_rub_salary(currency, salary_from, salary_to)
+    return predict_rub_salary(currency, vacancy['from'], vacancy['to'])
 
 
 def predict_rub_salary_for_sj(vacancy):
     if not (vacancy['payment_to'] or vacancy['payment_from']):
         return None
     currency = vacancy['currency']
-    salary_from = None if vacancy['payment_from'] == 0 else vacancy['payment_from']  
-    salary_to = None if vacancy['payment_to'] == 0 else vacancy['payment_to']
-    return predict_rub_salary(currency, salary_from, salary_to)
+    return predict_rub_salary(currency, vacancy['payment_from'], vacancy['payment_to'])
 
 
 def  output_vacancies_as_table(name_of_site, number_of_vacancies_by_languege):
