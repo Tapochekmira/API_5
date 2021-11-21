@@ -4,6 +4,7 @@ from pprint import pprint
 from math import ceil
 from terminaltables import AsciiTable
 from dotenv import load_dotenv
+from itertools import count
 
 
 def predict_rub_salary(salary_from, salary_to):
@@ -56,18 +57,7 @@ def get_language_salary_hh(language):
     sum_of_salaryes = 0
     vacancies_processed = 0
     
-    payload = {
-            'text': f'Программист {language}',
-            'area': 1,
-            'period': 30,
-            'only_with_salary': 'true',
-        }
-
-    response = requests.get(url, params=payload)
-    response.raise_for_status()
-    vacancies_found = response.json()['found']
-    pages = response.json()['pages']
-    for page in range(pages):
+    for page in count(0):
         payload = {
             'text': f'Программист {language}',
             'area': 1,
@@ -78,12 +68,19 @@ def get_language_salary_hh(language):
         response = requests.get(url, params=payload)
         response.raise_for_status()
         
-        vacancies = response.json()['items']
+        response = response.json()
+        vacancies_found = response['found']
+        vacancies = response['items']
+        
         for vacancy in vacancies:
             salary = predict_rub_salary_for_hh(vacancy['salary'])
             if salary:
                 sum_of_salaryes += salary 
                 vacancies_processed += 1
+        
+        if page >= response['pages']:
+            break
+        
     return sum_of_salaryes, vacancies_processed, vacancies_found
 
     
@@ -105,23 +102,13 @@ def get_average_salary_from_hh(programming_languages):
 
 def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
-    headers = {
-        'X-Api-App-Id': super_job_token,
-    }
-    payload = {
-            'town': 4,
-            'keyword': f'Программист {language}',
-    }
     sum_of_salaryes = 0
     vacancies_processed = 0
     
-    response = requests.get(url, headers=headers, params=payload)
-    response.raise_for_status()
-    
-    vacancies_found = response.json()['total']
-    
-    pages = ceil(vacancies_found / 100)
-    for page in range(pages):
+    for page in count(0):
+        headers = {
+            'X-Api-App-Id': super_job_token,
+        }
         payload = {
             'town': 4,
             'keyword': f'Программист {language}',
@@ -130,12 +117,19 @@ def get_language_salary_sj(language, super_job_token):
         }
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
-        vacancies = response.json()['objects']
+        
+        response = response.json()
+        vacancies_found = response['total']
+        vacancies = response['objects']
         for vacancy in vacancies:
             salary = predict_rub_salary_for_sj(vacancy) 
             if salary:
                 sum_of_salaryes += salary 
                 vacancies_processed += 1
+                
+        if not response['more']:
+            break
+        
     return sum_of_salaryes, vacancies_processed, vacancies_found
 
 
