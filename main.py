@@ -24,7 +24,7 @@ def predict_rub_salary_for_hh(vacancy):
 
 
 def predict_rub_salary_for_sj(vacancy):
-    if vacancy['payment_to'] == vacancy['payment_from'] == 0:
+    if not (vacancy['payment_to'] or vacancy['payment_from']):
         return None
     currency = vacancy['currency']
     salary_from = None if vacancy['payment_from'] == 0 else vacancy['payment_from']  
@@ -90,7 +90,7 @@ def get_salary_from_hh():
             vacancies = response.json()['items']
             for vacancy in vacancies:
                 salary = predict_rub_salary_for_hh(vacancy['salary'])
-                if salary != None:
+                if salary:
                     sum_of_salaryes += salary 
                     vacancies_processed += 1
         average_salary = int(sum_of_salaryes / vacancies_processed)
@@ -142,7 +142,7 @@ def get_salary_from_sj():
             vacancies = response.json()['objects']
             for vacancy in vacancies:
                 salary = predict_rub_salary_for_sj(vacancy) 
-                if salary != None:
+                if salary:
                     sum_of_salaryes += salary 
                     vacancies_processed += 1
 
@@ -164,6 +164,8 @@ def get_salary_from_sj():
         })
     output_vacancies_as_table('Super Job', number_of_vacancies_by_languege)
 
-load_dotenv()
-#get_salary_from_hh()
-get_salary_from_sj()
+
+if __name__ == __main__:
+    load_dotenv()
+    get_salary_from_hh()
+    get_salary_from_sj()
