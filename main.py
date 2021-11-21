@@ -63,6 +63,7 @@ def get_language_salary_hh(language):
             'area': 1,
             'period': 30,
             'only_with_salary': 'true',
+            'per_page': 100,
             'page': page
         }
         response = requests.get(url, params=payload)
