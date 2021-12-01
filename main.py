@@ -1,14 +1,13 @@
 import os
-import requests
-from pprint import pprint
-from math import ceil
-from terminaltables import AsciiTable
-from dotenv import load_dotenv
 from itertools import count
+
+import requests
+from dotenv import load_dotenv
+from terminaltables import AsciiTable
 
 
 def predict_rub_salary(salary_from, salary_to):
-    if not(salary_from or salary_to):
+    if not (salary_from or salary_to):
         return None
     if not salary_from:
         return int(salary_to * 0.8)
@@ -32,31 +31,31 @@ def predict_rub_salary_for_sj(vacancy):
 
 
 def output_vacancies_as_table(name_of_site, number_of_vacancies_by_language):
-    title = f'{name_of_site} Moscow'  
-    table_data = [
+    title = f'{name_of_site} Moscow'
+    table_with_vacancies = [
         (
-            'Язык программирования', 
+            'Язык программирования',
             'Вакансий найдено',
             'Вакансий обработано',
             'Средняя зарплата'
         )
     ]
 
-    table_data += [(language, result['vacancies_found'], 
-                   result['vacancies_processed'],
-                   result['average_salary'])
-                  for language, result in 
-                  number_of_vacancies_by_language.items()]
-    table_instance = AsciiTable(table_data, title)
+    table_with_vacancies += [(language, number['vacancies_found'],
+                              number['vacancies_processed'],
+                              number['average_salary'])
+                             for language, number in
+                             number_of_vacancies_by_language.items()]
+    table_instance = AsciiTable(table_with_vacancies, title)
     table_instance.justify_columns[2] = 'right'
     print(table_instance.table)
 
 
 def get_language_salary_hh(language):
     url = 'https://api.hh.ru/vacancies'
-    sum_of_salaryes = 0
+    sum_of_salaries = 0
     vacancies_processed = 0
-    
+
     for page in count(0):
         payload = {
             'text': f'Программист {language}',
@@ -68,43 +67,43 @@ def get_language_salary_hh(language):
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
-        
+
         response = response.json()
         vacancies_found = response['found']
         vacancies = response['items']
-        
+
         for vacancy in vacancies:
             salary = predict_rub_salary_for_hh(vacancy['salary'])
             if salary:
-                sum_of_salaryes += salary 
+                sum_of_salaries += salary
                 vacancies_processed += 1
         if page >= response['pages']:
             break
-        
-    return sum_of_salaryes, vacancies_processed, vacancies_found
 
-    
+    return sum_of_salaries, vacancies_processed, vacancies_found
+
+
 def get_average_salary_from_hh(programming_languages):
-    number_of_vacancies_by_language = {} 
+    number_of_vacancies_by_language = {}
 
     for language in programming_languages:
-        sum_of_salaryes, vacancies_processed, vacancies_found = get_language_salary_hh(language)
-        average_salary = int(sum_of_salaryes / vacancies_processed)
-        
+        sum_of_salaries, vacancies_processed, vacancies_found = get_language_salary_hh(language)
+        average_salary = int(sum_of_salaries / vacancies_processed)
+
         number_of_vacancies_by_language[language] = {
             "vacancies_found": vacancies_found,
             "vacancies_processed": vacancies_processed,
             "average_salary": average_salary
         }
-        
+
     return number_of_vacancies_by_language
 
 
 def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
-    sum_of_salaryes = 0
+    sum_of_salaries = 0
     vacancies_processed = 0
-    
+
     for page in count(0):
         headers = {
             'X-Api-App-Id': super_job_token,
@@ -117,33 +116,33 @@ def get_language_salary_sj(language, super_job_token):
         }
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
-        
+
         response = response.json()
         vacancies_found = response['total']
         vacancies = response['objects']
         for vacancy in vacancies:
-            salary = predict_rub_salary_for_sj(vacancy) 
+            salary = predict_rub_salary_for_sj(vacancy)
             if salary:
-                sum_of_salaryes += salary 
+                sum_of_salaries += salary
                 vacancies_processed += 1
-                
+
         if not response['more']:
             break
-        
-    return sum_of_salaryes, vacancies_processed, vacancies_found
+
+    return sum_of_salaries, vacancies_processed, vacancies_found
 
 
 def get_average_salary_from_sj(programming_languages, super_job_token):
     number_of_vacancies_by_language = {}
 
     for language in programming_languages:
-        sum_of_salaryes, vacancies_processed, vacancies_found = get_language_salary_sj(language, super_job_token)
+        sum_of_salaries, vacancies_processed, vacancies_found = get_language_salary_sj(language, super_job_token)
         average_salary = None
         if vacancies_processed:
-            average_salary = int(sum_of_salaryes / vacancies_processed)
-        
+            average_salary = int(sum_of_salaries / vacancies_processed)
+
         number_of_vacancies_by_language[language] = {
-            "vacancies_found": vacancies_found, 
+            "vacancies_found": vacancies_found,
             "vacancies_processed": vacancies_processed,
             "average_salary": average_salary
         }
@@ -152,7 +151,7 @@ def get_average_salary_from_sj(programming_languages, super_job_token):
 
 if __name__ == '__main__':
     load_dotenv()
-    programming_languages = ['JavaScript' , 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
+    programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
     super_job_token = os.environ['SUPER_JOB_API']
 
     output_vacancies_as_table('HH.ru', get_average_salary_from_hh(programming_languages))
