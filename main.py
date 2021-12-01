@@ -30,7 +30,10 @@ def predict_rub_salary_for_sj(vacancy):
     return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
 
 
-def output_vacancies_as_table(name_of_site, number_of_vacancies_by_language):
+def converting_the_vacancy_list_into_a_table(
+        name_of_site,
+        number_of_vacancies_by_language
+):
     title = f'{name_of_site} Moscow'
     table_with_vacancies = [
         (
@@ -48,7 +51,7 @@ def output_vacancies_as_table(name_of_site, number_of_vacancies_by_language):
                              number_of_vacancies_by_language.items()]
     table_instance = AsciiTable(table_with_vacancies, title)
     table_instance.justify_columns[2] = 'right'
-    print(table_instance.table)
+    return table_instance.table
 
 
 def get_language_salary_hh(language):
@@ -164,11 +167,17 @@ if __name__ == '__main__':
         'Go'
     ]
     super_job_token = os.environ['SUPER_JOB_API']
-    output_vacancies_as_table('HH.ru',
-                              get_average_salary_from_hh(programming_languages)
-                              )
-    output_vacancies_as_table('SJ.ru',
-                              get_average_salary_from_sj(
-                                  programming_languages,
-                                  super_job_token)
-                              )
+    print(
+        converting_the_vacancy_list_into_a_table(
+            'HH.ru',
+            get_average_salary_from_hh(programming_languages)
+        )
+    )
+    print(
+        converting_the_vacancy_list_into_a_table(
+            'SJ.ru',
+            get_average_salary_from_sj(
+                programming_languages,
+                super_job_token)
+        )
+    )
