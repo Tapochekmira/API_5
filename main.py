@@ -75,17 +75,16 @@ def get_language_salary_hh(language):
         payload['page'] = page
         response = requests.get(url, params=payload)
         response.raise_for_status()
-
         response = response.json()
-        vacancies = response['items']
+        if page >= response['pages']:
+            break
 
+        vacancies = response['items']
         for vacancy in vacancies:
             salary = predict_rub_salary_for_hh(vacancy['salary'])
             if salary:
                 sum_of_salaries += salary
                 vacancies_processed += 1
-        if page > response['pages']:
-            break
 
     vacancies_found = response['found']
     return sum_of_salaries, vacancies_processed, vacancies_found
