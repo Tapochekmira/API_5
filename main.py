@@ -87,7 +87,8 @@ def get_average_salary_from_hh(programming_languages):
     number_of_vacancies_by_language = {}
 
     for language in programming_languages:
-        sum_of_salaries, vacancies_processed, vacancies_found = get_language_salary_hh(language)
+        sum_of_salaries, vacancies_processed, vacancies_found = \
+            get_language_salary_hh(language)
         average_salary = int(sum_of_salaries / vacancies_processed)
 
         number_of_vacancies_by_language[language] = {
@@ -136,7 +137,8 @@ def get_average_salary_from_sj(programming_languages, super_job_token):
     number_of_vacancies_by_language = {}
 
     for language in programming_languages:
-        sum_of_salaries, vacancies_processed, vacancies_found = get_language_salary_sj(language, super_job_token)
+        sum_of_salaries, vacancies_processed, vacancies_found = \
+            get_language_salary_sj(language, super_job_token)
         average_salary = None
         if vacancies_processed:
             average_salary = int(sum_of_salaries / vacancies_processed)
@@ -151,8 +153,22 @@ def get_average_salary_from_sj(programming_languages, super_job_token):
 
 if __name__ == '__main__':
     load_dotenv()
-    programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'C++', 'C#', 'C', 'Go']
+    programming_languages = [
+        'JavaScript',
+        'Java',
+        'Python',
+        'Ruby',
+        'C++',
+        'C#',
+        'C',
+        'Go'
+    ]
     super_job_token = os.environ['SUPER_JOB_API']
-
-    output_vacancies_as_table('HH.ru', get_average_salary_from_hh(programming_languages))
-    output_vacancies_as_table('SJ.ru', get_average_salary_from_sj(programming_languages, super_job_token))
+    output_vacancies_as_table('HH.ru',
+                              get_average_salary_from_hh(programming_languages)
+                              )
+    output_vacancies_as_table('SJ.ru',
+                              get_average_salary_from_sj(
+                                  programming_languages,
+                                  super_job_token)
+                              )
