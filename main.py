@@ -72,7 +72,7 @@ def get_language_salary_hh(language):
         'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
     }
     for page in count(0):
-        payload['page']: page
+        payload['page'] = page
         response = requests.get(url, params=payload)
         response.raise_for_status()
 
@@ -166,12 +166,12 @@ if __name__ == '__main__':
     programming_languages = [
         'JavaScript',
         'Java',
-        # 'Python',
-        # 'Ruby',
-        # 'C++',
-        # 'C#',
-        # 'C',
-        # 'Go'
+        'Python',
+        'Ruby',
+        'C++',
+        'C#',
+        'C',
+        'Go'
     ]
     super_job_token = os.environ['SUPER_JOB_API']
     print(
