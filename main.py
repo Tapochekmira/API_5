@@ -64,21 +64,19 @@ def get_language_salary_hh(language):
     url = 'https://api.hh.ru/vacancies'
     sum_of_salaries = 0
     vacancies_processed = 0
-
+    payload = {
+        'text': f'Программист {language}',
+        'area': NUMBER_OF_MOSCOW_FOR_HH,
+        'period': AGE_OF_OLDEST_VACANCY_HH,
+        'only_with_salary': 'true',
+        'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
+    }
     for page in count(0):
-        payload = {
-            'text': f'Программист {language}',
-            'area': NUMBER_OF_MOSCOW_FOR_HH,
-            'period': AGE_OF_OLDEST_VACANCY_HH,
-            'only_with_salary': 'true',
-            'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
-            'page': page
-        }
+        payload['page']: page
         response = requests.get(url, params=payload)
         response.raise_for_status()
 
         response = response.json()
-        vacancies_found = response['found']
         vacancies = response['items']
 
         for vacancy in vacancies:
@@ -89,6 +87,7 @@ def get_language_salary_hh(language):
         if page >= response['pages']:
             break
 
+    vacancies_found = response['found']
     return sum_of_salaries, vacancies_processed, vacancies_found
 
 
@@ -113,22 +112,21 @@ def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
     sum_of_salaries = 0
     vacancies_processed = 0
+    payload = {
+        'town': NUMBER_OF_MOSCOW_FOR_SJ,
+        'keyword': f'Программист {language}',
+        'count': NUMBER_OF_RESPONSES_PER_PAGE_SJ
+    }
 
     for page in count(0):
         headers = {
             'X-Api-App-Id': super_job_token,
         }
-        payload = {
-            'town': NUMBER_OF_MOSCOW_FOR_SJ,
-            'keyword': f'Программист {language}',
-            'page': page,
-            'count': NUMBER_OF_RESPONSES_PER_PAGE_SJ
-        }
+        payload['page'] = page
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
 
         response = response.json()
-        vacancies_found = response['total']
         vacancies = response['objects']
         for vacancy in vacancies:
             salary = predict_rub_salary_for_sj(vacancy)
@@ -139,6 +137,7 @@ def get_language_salary_sj(language, super_job_token):
         if not response['more']:
             break
 
+    vacancies_found = response['total']
     return sum_of_salaries, vacancies_processed, vacancies_found
 
 
