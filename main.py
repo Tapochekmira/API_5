@@ -97,7 +97,9 @@ def get_average_salary_from_hh(programming_languages):
     for language in programming_languages:
         sum_of_salaries, vacancies_processed, vacancies_found = \
             get_language_salary_hh(language)
-        average_salary = int(sum_of_salaries / vacancies_processed)
+        average_salary = None
+        if vacancies_processed:
+            average_salary = int(sum_of_salaries / vacancies_processed)
 
         average_salary_by_language[language] = {
             "vacancies_found": vacancies_found,
