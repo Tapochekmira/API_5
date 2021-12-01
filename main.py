@@ -87,20 +87,20 @@ def get_language_salary_hh(language):
 
 
 def get_average_salary_from_hh(programming_languages):
-    number_of_vacancies_by_language = {}
+    average_salary_by_language = {}
 
     for language in programming_languages:
         sum_of_salaries, vacancies_processed, vacancies_found = \
             get_language_salary_hh(language)
         average_salary = int(sum_of_salaries / vacancies_processed)
 
-        number_of_vacancies_by_language[language] = {
+        average_salary_by_language[language] = {
             "vacancies_found": vacancies_found,
             "vacancies_processed": vacancies_processed,
             "average_salary": average_salary
         }
 
-    return number_of_vacancies_by_language
+    return average_salary_by_language
 
 
 def get_language_salary_sj(language, super_job_token):
@@ -137,7 +137,7 @@ def get_language_salary_sj(language, super_job_token):
 
 
 def get_average_salary_from_sj(programming_languages, super_job_token):
-    number_of_vacancies_by_language = {}
+    average_salary_by_language = {}
 
     for language in programming_languages:
         sum_of_salaries, vacancies_processed, vacancies_found = \
@@ -146,12 +146,12 @@ def get_average_salary_from_sj(programming_languages, super_job_token):
         if vacancies_processed:
             average_salary = int(sum_of_salaries / vacancies_processed)
 
-        number_of_vacancies_by_language[language] = {
+        average_salary_by_language[language] = {
             "vacancies_found": vacancies_found,
             "vacancies_processed": vacancies_processed,
             "average_salary": average_salary
         }
-    return number_of_vacancies_by_language
+    return average_salary_by_language
 
 
 if __name__ == '__main__':
@@ -159,12 +159,12 @@ if __name__ == '__main__':
     programming_languages = [
         'JavaScript',
         'Java',
-        'Python',
-        'Ruby',
-        'C++',
-        'C#',
-        'C',
-        'Go'
+        # 'Python',
+        # 'Ruby',
+        # 'C++',
+        # 'C#',
+        # 'C',
+        # 'Go'
     ]
     super_job_token = os.environ['SUPER_JOB_API']
     print(
