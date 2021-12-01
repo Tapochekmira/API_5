@@ -5,6 +5,12 @@ import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
+NUMBER_OF_MOSCOW_FOR_HH = 1
+AGE_OF_OLDEST_VACANCY_HH = 30
+NUMBER_OF_RESPONSES_PER_PAGE_HH = 100
+NUMBER_OF_MOSCOW_FOR_SJ = 4
+NUMBER_OF_RESPONSES_PER_PAGE_SJ = 100
+
 
 def predict_rub_salary(salary_from, salary_to):
     if not (salary_from or salary_to):
@@ -62,10 +68,10 @@ def get_language_salary_hh(language):
     for page in count(0):
         payload = {
             'text': f'Программист {language}',
-            'area': 1,
-            'period': 30,
+            'area': NUMBER_OF_MOSCOW_FOR_HH,
+            'period': AGE_OF_OLDEST_VACANCY_HH,
             'only_with_salary': 'true',
-            'per_page': 100,
+            'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
             'page': page
         }
         response = requests.get(url, params=payload)
@@ -113,10 +119,10 @@ def get_language_salary_sj(language, super_job_token):
             'X-Api-App-Id': super_job_token,
         }
         payload = {
-            'town': 4,
+            'town': NUMBER_OF_MOSCOW_FOR_SJ,
             'keyword': f'Программист {language}',
             'page': page,
-            'count': 100
+            'count': NUMBER_OF_RESPONSES_PER_PAGE_SJ
         }
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
