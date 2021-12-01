@@ -84,7 +84,7 @@ def get_language_salary_hh(language):
             if salary:
                 sum_of_salaries += salary
                 vacancies_processed += 1
-        if page >= response['pages']:
+        if page > response['pages']:
             break
 
     vacancies_found = response['found']
