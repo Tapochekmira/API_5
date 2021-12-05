@@ -53,7 +53,7 @@ def creating_table_average_salary_by_language(
                               vacancies_information['average_salary'])
                              for language, vacancies_information in
                              average_salary_by_language.items()]
-    
+
     table_with_vacancies = AsciiTable(table_with_vacancies, title)
     table_with_vacancies.justify_columns[2] = 'right'
     return table_with_vacancies.table
@@ -100,9 +100,9 @@ def get_average_salary_from_hh(programming_languages):
             average_salary = int(sum_of_salaries / vacancies_processed)
 
         average_salary_by_language[language] = {
-            "vacancies_found": vacancies_found,
-            "vacancies_processed": vacancies_processed,
-            "average_salary": average_salary
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': vacancies_processed,
+            'average_salary': average_salary
         }
 
     return average_salary_by_language
@@ -152,9 +152,9 @@ def get_average_salary_from_sj(programming_languages, super_job_token):
             average_salary = int(sum_of_salaries / vacancies_processed)
 
         average_salary_by_language[language] = {
-            "vacancies_found": vacancies_found,
-            "vacancies_processed": vacancies_processed,
-            "average_salary": average_salary
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': vacancies_processed,
+            'average_salary': average_salary
         }
     return average_salary_by_language
 
