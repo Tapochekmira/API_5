@@ -34,9 +34,9 @@ def predict_rub_salary_for_sj(vacancy):
     return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
 
 
-def creating_table_with_average_salary_by_language(
+def creating_table_average_salary_by_language(
         name_of_site,
-        number_of_vacancies_by_language
+        average_salary_by_language
 ):
     title = f'{name_of_site} Moscow'
     table_with_vacancies = [
@@ -48,14 +48,15 @@ def creating_table_with_average_salary_by_language(
         )
     ]
 
-    table_with_vacancies += [(language, number['vacancies_found'],
-                              number['vacancies_processed'],
-                              number['average_salary'])
-                             for language, number in
-                             number_of_vacancies_by_language.items()]
-    table_instance = AsciiTable(table_with_vacancies, title)
-    table_instance.justify_columns[2] = 'right'
-    return table_instance.table
+    table_with_vacancies += [(language, vacancies_information['vacancies_found'],
+                              vacancies_information['vacancies_processed'],
+                              vacancies_information['average_salary'])
+                             for language, vacancies_information in
+                             average_salary_by_language.items()]
+    
+    table_with_vacancies = AsciiTable(table_with_vacancies, title)
+    table_with_vacancies.justify_columns[2] = 'right'
+    return table_with_vacancies.table
 
 
 def get_language_salary_hh(language):
@@ -170,15 +171,15 @@ if __name__ == '__main__':
         'C',
         'Go'
     ]
-    super_job_token = os.environ['SUPER_JOB_API']
+    super_job_token = os.environ['SUPER_JOB_TOKEN']
     print(
-        creating_table_with_average_salary_by_language(
+        creating_table_average_salary_by_language(
             'HH.ru',
             get_average_salary_from_hh(programming_languages)
         )
     )
     print(
-        creating_table_with_average_salary_by_language(
+        creating_table_average_salary_by_language(
             'SJ.ru',
             get_average_salary_from_sj(
                 programming_languages,
