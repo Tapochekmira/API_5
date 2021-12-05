@@ -34,7 +34,7 @@ def predict_rub_salary_for_sj(vacancy):
     return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
 
 
-def converting_the_vacancy_list_into_a_table(
+def creating_table_with_average_salary_by_language(
         name_of_site,
         number_of_vacancies_by_language
 ):
@@ -172,13 +172,13 @@ if __name__ == '__main__':
     ]
     super_job_token = os.environ['SUPER_JOB_API']
     print(
-        converting_the_vacancy_list_into_a_table(
+        creating_table_with_average_salary_by_language(
             'HH.ru',
             get_average_salary_from_hh(programming_languages)
         )
     )
     print(
-        converting_the_vacancy_list_into_a_table(
+        creating_table_with_average_salary_by_language(
             'SJ.ru',
             get_average_salary_from_sj(
                 programming_languages,
