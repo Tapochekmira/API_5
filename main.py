@@ -5,12 +5,6 @@ import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
-NUMBER_OF_MOSCOW_FOR_HH = 1
-AGE_OF_OLDEST_VACANCY_HH = 30
-NUMBER_OF_RESPONSES_PER_PAGE_HH = 100
-NUMBER_OF_MOSCOW_FOR_SJ = 4
-NUMBER_OF_RESPONSES_PER_PAGE_SJ = 100
-
 
 def predict_rub_salary(salary_from, salary_to):
     if not (salary_from or salary_to):
@@ -74,20 +68,22 @@ def get_language_salary_hh(language):
         'only_with_salary': 'true',
         'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
     }
+    
     for page in count(0):
         payload['page'] = page
         response = requests.get(url, params=payload)
         response.raise_for_status()
         response = response.json()
-        if page >= response['pages']:
-            break
-
         vacancies = response['items']
+
         for vacancy in vacancies:
             salary = predict_rub_salary_for_hh(vacancy['salary'])
             if salary:
                 sum_of_salaries += salary
                 vacancies_processed += 1
+
+        if page >= response['pages'] - 1:
+            break
 
     vacancies_found = response['found']
     return sum_of_salaries, vacancies_processed, vacancies_found
