@@ -48,11 +48,15 @@ def creating_table_average_salary_by_language(
         )
     ]
 
-    table_with_vacancies += [(language, vacancies_information['vacancies_found'],
-                              vacancies_information['vacancies_processed'],
-                              vacancies_information['average_salary'])
-                             for language, vacancies_information in
-                             average_salary_by_language.items()]
+    table_with_vacancies += [
+        (
+            language, vacancies_information['vacancies_found'],
+            vacancies_information['vacancies_processed'],
+            vacancies_information['average_salary']
+        )
+        for language, vacancies_information in
+        average_salary_by_language.items()
+    ]
 
     table_with_vacancies = AsciiTable(table_with_vacancies, title)
     table_with_vacancies.justify_columns[2] = 'right'
