@@ -29,8 +29,6 @@ def predict_rub_salary_for_hh(vacancy):
 
 
 def predict_rub_salary_for_sj(vacancy):
-    if not (vacancy['payment_to'] or vacancy['payment_from']):
-        return None
     if vacancy['currency'] != 'rub':
         return None
     return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
@@ -113,6 +111,9 @@ def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
     sum_of_salaries = 0
     vacancies_processed = 0
+    headers = {
+        'X-Api-App-Id': super_job_token,
+    }
     payload = {
         'town': NUMBER_OF_MOSCOW_FOR_SJ,
         'keyword': f'Программист {language}',
@@ -120,9 +121,6 @@ def get_language_salary_sj(language, super_job_token):
     }
 
     for page in count(0):
-        headers = {
-            'X-Api-App-Id': super_job_token,
-        }
         payload['page'] = page
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
