@@ -59,16 +59,19 @@ def creating_table_average_salary_by_language(
 
 def get_language_salary_hh(language):
     url = 'https://api.hh.ru/vacancies'
+    number_of_moscow_for_hh = 1
+    age_of_oldest_vacancy_hh = 30
+    number_of_responses_per_page_hh = 100
     sum_of_salaries = 0
     vacancies_processed = 0
     payload = {
         'text': f'Программист {language}',
-        'area': NUMBER_OF_MOSCOW_FOR_HH,
-        'period': AGE_OF_OLDEST_VACANCY_HH,
+        'area': number_of_moscow_for_hh,
+        'period': age_of_oldest_vacancy_hh,
         'only_with_salary': 'true',
-        'per_page': NUMBER_OF_RESPONSES_PER_PAGE_HH,
+        'per_page': number_of_responses_per_page_hh,
     }
-    
+
     for page in count(0):
         payload['page'] = page
         response = requests.get(url, params=payload)
@@ -110,15 +113,17 @@ def get_average_salary_from_hh(programming_languages):
 
 def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
+    number_of_moscow_for_sj = 4
+    number_of_responses_per_page_sj = 100
     sum_of_salaries = 0
     vacancies_processed = 0
     headers = {
         'X-Api-App-Id': super_job_token,
     }
     payload = {
-        'town': NUMBER_OF_MOSCOW_FOR_SJ,
+        'town': number_of_moscow_for_sj,
         'keyword': f'Программист {language}',
-        'count': NUMBER_OF_RESPONSES_PER_PAGE_SJ
+        'count': number_of_responses_per_page_sj
     }
 
     for page in count(0):
