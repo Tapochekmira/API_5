@@ -28,7 +28,7 @@ def predict_rub_salary_for_sj(vacancy):
     return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
 
 
-def creating_table_average_salary_by_language(
+def create_average_language_salary_table(
         name_of_site,
         average_salary_by_language
 ):
@@ -178,13 +178,13 @@ if __name__ == '__main__':
     ]
     super_job_token = os.environ['SUPER_JOB_TOKEN']
     print(
-        creating_table_average_salary_by_language(
+        create_average_language_salary_table(
             'HH.ru',
             get_average_salary_from_hh(programming_languages)
         )
     )
     print(
-        creating_table_average_salary_by_language(
+        create_average_language_salary_table(
             'SJ.ru',
             get_average_salary_from_sj(
                 programming_languages,
