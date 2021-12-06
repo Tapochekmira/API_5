@@ -44,11 +44,11 @@ def create_average_language_salary_table(
 
     table_with_vacancies += [
         (
-            language, vacancies_information['vacancies_found'],
-            vacancies_information['vacancies_processed'],
-            vacancies_information['average_salary']
+            language, vacancies_statistics['vacancies_found'],
+            vacancies_statistics['vacancies_processed'],
+            vacancies_statistics['average_salary']
         )
-        for language, vacancies_information in
+        for language, vacancies_statistics in
         average_salary_by_language.items()
     ]
 
@@ -59,17 +59,17 @@ def create_average_language_salary_table(
 
 def get_language_salary_hh(language):
     url = 'https://api.hh.ru/vacancies'
-    number_of_moscow_for_hh = 1
-    age_of_oldest_vacancy_hh = 30
-    number_of_responses_per_page_hh = 100
+    number_of_moscow_for = 1
+    age_of_oldest_vacancy = 30
+    number_of_responses_per_page = 100
     sum_of_salaries = 0
     vacancies_processed = 0
     payload = {
         'text': f'Программист {language}',
-        'area': number_of_moscow_for_hh,
-        'period': age_of_oldest_vacancy_hh,
+        'area': number_of_moscow_for,
+        'period': age_of_oldest_vacancy,
         'only_with_salary': 'true',
-        'per_page': number_of_responses_per_page_hh,
+        'per_page': number_of_responses_per_page,
     }
 
     for page in count(0):
@@ -113,17 +113,17 @@ def get_average_salary_from_hh(programming_languages):
 
 def get_language_salary_sj(language, super_job_token):
     url = 'https://api.superjob.ru/2.0/vacancies'
-    number_of_moscow_for_sj = 4
-    number_of_responses_per_page_sj = 100
+    number_of_moscow_for = 4
+    number_of_responses_per_page = 100
     sum_of_salaries = 0
     vacancies_processed = 0
     headers = {
         'X-Api-App-Id': super_job_token,
     }
     payload = {
-        'town': number_of_moscow_for_sj,
+        'town': number_of_moscow_for,
         'keyword': f'Программист {language}',
-        'count': number_of_responses_per_page_sj
+        'count': number_of_responses_per_page
     }
 
     for page in count(0):
