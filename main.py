@@ -68,7 +68,6 @@ def get_language_salary_hh(language):
         'text': f'Программист {language}',
         'area': number_of_moscow_for,
         'period': age_of_oldest_vacancy,
-        'only_with_salary': 'true',
         'per_page': number_of_responses_per_page,
     }
 
