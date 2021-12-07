@@ -16,16 +16,18 @@ def predict_rub_salary(salary_from, salary_to):
     return (salary_to + salary_from) // 2
 
 
-def predict_rub_salary_for_hh(vacancy):
-    if vacancy['currency'] != 'RUR':
+def predict_rub_salary_for_hh(salary):
+    if not salary:
         return None
-    return predict_rub_salary(vacancy['from'], vacancy['to'])
+    if salary['currency'] != 'RUR':
+        return None
+    return predict_rub_salary(salary['from'], salary['to'])
 
 
-def predict_rub_salary_for_sj(vacancy):
-    if vacancy['currency'] != 'rub':
+def predict_rub_salary_for_sj(salary):
+    if salary['currency'] != 'rub':
         return None
-    return predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
+    return predict_rub_salary(salary['payment_from'], salary['payment_to'])
 
 
 def create_average_language_salary_table(
